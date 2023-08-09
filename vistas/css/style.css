@@ -1,0 +1,55 @@
+* {
+        margin: 0;
+}/*Se recomienda que pongamos los esilos en orden ALFABETICO etiquetas, identificadores y clases
+(no es obligatorio)*/
+body{
+    background: #435AD9; /*ESTO ES EL COLOR DE FONDO DE LA PAGINA*/
+
+}
+h3{
+    text-align: center;
+    color:ghostwhite;
+    font-size: 2.5em;/*Para el tamaño y CSS en letras, se utiliza el "em" que es m=8x8 
+    altura x anchura, YA NO SE UTLIZAN "px". "em" es muy utilizado por los designers web*/
+
+}
+main{ /*ESTO ES LO QUE VA EN MEDIO DE LA PAGINA*/
+    background: #2c1e97;
+    width: 800px;
+    height: 980px;
+    margin: auto;
+    margin-top: 25px;
+    border: 1px solid #042833;/*ESTO ES EL COLOR Y MARGEN DEL ENCABEZDO Y MAIN DE LA PAGINA*/
+    border-radius: 10px;
+
+}
+/*Se pueden poner 2 clases en una misma que compartan los mismos atributos de CSS*/
+.encabezado{ /*ESTO ES EL ENCABEZADO Y PIE DE PAGINA DEL MAIN*/
+    background: #8E2AA3;
+    margin-top: 2px;
+    margin: auto;
+    height: 200px;
+    border: 1px solid #042833;
+    border-radius: 3px;
+
+}
+
+.pie{/*Se llama a la clase del pie de pagina para bajarlo a donde debe*/
+  
+    clear: both;
+    position: relative;
+    background: #8E2AA3;
+    margin-top: 2px;
+    margin: auto;
+    height: 200px;
+    border: 1px solid #042833;
+    border-radius: 3px;
+      
+}
+
+/*Como puedo cambiar de color los botones de BOOKSTRAP*/
+.btn, .btn-warning{
+    text-align: center;
+    color:ghostwhite;
+    font-size: 2.5em;
+}
