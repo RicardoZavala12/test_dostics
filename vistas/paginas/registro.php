@@ -26,7 +26,7 @@
         }
        
 </style>
-<br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br>
 
 <div style="width:auto;">
 <?php
@@ -48,7 +48,7 @@
                 }
             </script>';
 
-            echo '<div class="alert alert-success">El usuario ha sido registrado</div>';
+            echo '<div class="alert alert-success" style="text-align:center;">User sig in successfully</div>';
             //en 3 segundos se va ha cargar la página de inicio
             /*echo '<script>
             setTimeout(function(){
@@ -63,137 +63,85 @@
                 }
             </script>';
 
-            echo '<div class="alert alert-danger">Error, no se permiten caracteres especiales</div>';
+            echo '<div class="alert alert-danger" style="text-align:center;">Error cant enter special caracter</div>';
         } else if ($registro != "") {
-            echo '<div class="alert alert-danger">Wrong to register</div>';
+            echo '<div class="alert alert-danger" style="text-align:center;">Wrong to register</div>';
         }
         ?> 
     </div>
-<div id="textAllForm" class="d-flex justify-content-center text-center signin-form">
+    <div id="textAllForm" class="d-flex justify-content-center text-center signin-form">
     <form class="p-5 bg-light" method="POST" id="form_signin">
-    <?php
-    if (isset($_SESSION["validaringreso"]) && $_SESSION["validaringreso"]) {
-        echo '<label id="textAllTitle"for="email">NEW USER</label>';
-    }else { echo '<label id="textAllTitle"for="email">SIGN UP</label>';}?>
-    
-    <br><br>
-        <div class="form-group">
-            <label for="nombre">Name</label>
-            
-            <div class="input-group">
+        <?php
+        if (isset($_SESSION["validaringreso"]) && $_SESSION["validaringreso"]) {
+            echo '<label id="textAllTitle" for="email">NEW USER</label>';
+        } else {
+            echo '<label id="textAllTitle" for="email">SIGN UP</label>';
+        } ?>
 
-                <input type="text" class="form-control" placeholder="Enter name"
-                 id="nombre" name="registroNombre">
-            </div>
-            
-        </div>
-<br><br>
-        <div class="form-group">
-            <label for="nombre">Last name</label>
-            
-            <div class="input-group">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="nombre">Name</label>
+                    <input type="text" class="form-control" placeholder="Enter name" id="nombre" name="registroNombre">
+                </div>
 
-                <input type="text" class="form-control" placeholder="last name"
-                 id="nombre" name="registroApp">
-            </div>
-            
-        </div>
-        <br>
-        <div class="form-group">
-            <label for="nombre">CURP</label>
-            
-            <div class="input-group">
+                <div class="form-group">
+                    <label for="nombre">Last name</label>
+                    <input type="text" class="form-control" placeholder="Last name" id="nombre" name="registroApp">
+                </div>
 
-                <input type="text" class="form-control" placeholder="curp"
-                 id="nombre" name="registroCurp">
+                <div class="form-group">
+                    <label for="nombre">CURP</label>
+                    <input type="text" class="form-control" placeholder="CURP" id="nombre" name="registroCurp">
+                </div>
             </div>
-            
-        </div>
-        <br>
-        <div class="form-group">
-            <label for="nombre">Age</label>
-            
-            <div class="input-group">
 
-                <input type="text" class="form-control" placeholder="Age"
-                 id="nombre" name="registroEdad">
-            </div>
-            
-        </div>
-        <br>
-        <div class="form-group">
-            <label for="nombre">Kg</label>
-            
-            <div class="input-group">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="nombre">Kg</label>
+                    <input type="number" class="form-control" placeholder="Kg" id="nombre" name="registroPeso">
+                </div>
 
-                <input type="number" class="form-control" placeholder="Kg"
-                 id="nombre" name="registroPeso">
-            </div>
-            
-        </div>
-        <br>
-        <div class="form-group">
-            <label for="nombre">Heigh</label>
-            
-            <div class="input-group">
+                <div class="form-group">
+                    <label for="nombre">Height</label>
+                    <input type="number" class="form-control" placeholder="Mts" id="nombre" name="registroAltura">
+                </div>
 
-                <input type="number" class="form-control" placeholder="Mts"
-                 id="nombre" name="registroAltura">
-            </div>
-            
-        </div>
-        <br>
-        <div class="form-group">
-            <label for="activo">Sex</label>
-            
-            <div class="input-group">
-                 <select class="form-control" id="activo" name="registroSex">
-                 <option value=""></option>
-                    <option value="M">MASCULINO</option>
-                    <option value="F">FEMENINO</option>
-                </select>
+                <div class="form-group">
+                    <label for="activo">Gender</label>
+                    <select class="form-control" id="activo" name="registroSex">
+                        <option value=""></option>
+                        <option value="MASCULINO">MASCULINO</option>
+                        <option value="FEMENINO">FEMENINO</option>
+                    </select>
+                </div>              
             </div>
         </div>
-        <br>
-        <div class="form-group">
-            <label for="activo">Place</label>
-            
-            <div class="input-group">
-                 <select class="form-control" id="activo" name="registroZona">
-                 <option value=""></option>
-                    <option value="CENTRO">CENTRO</option>
-                    <option value="NORTE">NORTE</option>
-                    <option value="NORTE">SUR</option>
-                </select>
-            </div>
-        </div>
-        <br>
+
+        <div class="form-group" style="text align:center;">
+                    <label for="activo">Place</label>
+                    <select class="form-control" id="activo" name="registroZona">
+                        <option value=""></option>
+                        <option value="CENTRO">CENTRO</option>
+                        <option value="NORTE">NORTE</option>
+                        <option value="SUR">SUR</option>
+                    </select>
+                </div>
         <div class="form-group">
             <label for="email">Email</label>
-            
-            <div class="input-group">
-                <input type="email" class="form-control" placeholder="Email address"
-                 id="email" name="registroEmail">
-            </div>
-            
+            <input type="email" class="form-control" placeholder="Email address" id="email" name="registroEmail">
         </div>
-<br>
+
         <div class="form-group">
             <label for="pwd">Password</label>
-            
-            <div class="input-group">
-                <input type="password" class="form-control" placeholder="Password"
-                 id="pwd" name="registroPassword">
-            </div>
-            
+            <input type="password" class="form-control" placeholder="Password" id="pwd" name="registroPassword">
         </div>
-        <br><br>
+
         <?php
-    if (isset($_SESSION["validaringreso"]) && $_SESSION["validaringreso"]) {
-        echo '<button type="submit" class="btn btn-success">Save user</button>';
-    }else { echo '<button type="submit" class="btn btn-success">Sign in</button>';}?>  
+        if (isset($_SESSION["validaringreso"]) && $_SESSION["validaringreso"]) {
+            echo '<br><button type="submit" class="btn btn-success">Save user</button>';
+        } else {
+            echo '<br><button type="submit" class="btn btn-success">Sign in</button>';
+        } ?>  
     </form>
 </div>
-
-
-

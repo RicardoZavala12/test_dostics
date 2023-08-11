@@ -60,7 +60,7 @@
 <body class="d-flex flex-column h-100">
   
 <main>
-   <footer class="pt-2 my-4 text-muted" style="text-align:center;">
+   <footer class="pt-2 my-4 text-white opacity-50" style="text-align:center; ">
     Created by Ricardo Zavala &middot; &copy; 2023
   </footer>
 </main>
