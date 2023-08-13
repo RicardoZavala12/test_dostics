@@ -18,19 +18,54 @@ class ControladorFormularios{
                 //crear token
                 $token = md5($_POST["registroNombre"] . "+" . $_POST["registroEmail"]);
 
-                /******************* OBTENER EDAD DEL CURP ******************/
+                /************************** OBTENER EDAD DEL CURP ******************/
                 $curp = $_POST["registroCurp"];
                 $fechaNaci = substr($curp, 4, 6);
-                
-                // Añadir "19" al año de nacimiento para considerar el siglo XX
-                $anoNacimiento = "19" . substr($fechaNaci, 0, 2);
+                $yearNacimiento = substr($fechaNaci, 0, 2);
 
-                $fechaNaciObj = DateTime::createFromFormat('ymd', $anoNacimiento . $fechaNaci);
+                // Asegurarse de que el año de nacimiento esté en el formato correcto (2 dígitos)
+                if ($yearNacimiento >= 40) {
+                    // Agregar el siglo correspondiente al año de nacimiento
+                    $fechaNaci = "19" . $fechaNaci;
+                } else {
+                    // Si el año de nacimiento es menor que 40, suponer que es del siglo 21
+                    $fechaNaci = "20" . $fechaNaci;
+                }
+
+                $fechaNaciObj = DateTime::createFromFormat('Ymd', $fechaNaci);
                 $fechaActual = new DateTime();
                 $edad = $fechaNaciObj->diff($fechaActual)->y;
-                /************************************************************/
 
-                
+                 /***************** CALCULO PESO IDEAL M y F *******************/
+                if($_POST["registroSex"] == 'MASCULINO'){
+                    $altura = $_POST["registroAltura"];
+
+                    $pesoIdeal = 50 + 0.555 * ($altura - 152.4);
+                } else {
+                    $altura = $_POST["registroAltura"];
+
+                    $pesoIdeal = 45.5 + 0.535 * ($altura - 152.4);
+                }
+                //$pesoIdeal = 45.5;
+
+                /************************* CALCULO IMC ************************/
+                    $altura = $_POST["registroAltura"];
+                    $peso = $_POST["registroPeso"];
+                    $alturaMetros = $altura / 100;
+                    $calculoIMC = $peso / ($alturaMetros ** 2);
+                    $IMC = number_format($calculoIMC, 2);
+
+                /************************* NIVEL DE PESO ************************/
+                if($IMC <= 18.5){
+                    $nivelPeso = "BAJO PESO";
+                }if($IMC >= 18.5 AND $IMC <= 24.9){
+                    $nivelPeso = "PESO NORMAL";
+                }if($IMC >= 25 AND $IMC <= 29.9){
+                    $nivelPeso = "SOBREPESO";
+                }if($IMC >= 30){
+                    $nivelPeso = "OBECIDAD";
+                }
+
                 /***************************** ENCRIPTAR EL PASSWORD ************************/
                 $encriptarPassword = crypt($_POST["registroPassword"],'$2a$07$MarteJupiterDatosSabado20$');
 
@@ -42,6 +77,9 @@ class ControladorFormularios{
                             "curp" => $_POST["registroCurp"],
                             "edad" => $edad,
                             "peso" => $_POST["registroPeso"],
+                            "peso_ideal" => $pesoIdeal,
+                            "nivel_peso" => $nivelPeso,
+                            "imc" => $IMC,
                             "altura" => $_POST["registroAltura"],
                             "sexo" => $_POST["registroSex"],
                             "zona" => $_POST["registroZona"],
@@ -167,6 +205,7 @@ class ControladorFormularios{
                         //datos para el modelo
                         $actualizarToken = md5($_POST["actualizarNombre"] . "+" . $_POST["actualizarEmail"]);
                         $tabla = "users";
+
                          /******************* OBTENER EDAD DEL CURP ******************/
                          $curp = $_POST["actualizarCurp"];
                          $fechaNaci = substr($curp, 4, 6);
@@ -181,18 +220,51 @@ class ControladorFormularios{
                                 $fechaNaci = "20" . $fechaNaci;
                             }
 
-$fechaNaciObj = DateTime::createFromFormat('Ymd', $fechaNaci);
-$fechaActual = new DateTime();
-$edad = $fechaNaciObj->diff($fechaActual)->y;
+                            $fechaNaciObj = DateTime::createFromFormat('Ymd', $fechaNaci);
+                            $fechaActual = new DateTime();
+                            $edad = $fechaNaciObj->diff($fechaActual)->y;
 
+                        /***************** CALCULO PESO IDEAL M y F *******************/
+                            if($_POST["actualizarSexo"] == 'MASCULINO'){
+                                $altura = $_POST["actualizarAltura"];
 
-                        /************************************************************/
+                                $pesoIdeal = 50 + 0.555 * ($altura - 152.4);
+                            } else {
+                                $altura = $_POST["actualizarAltura"];
+
+                                $pesoIdeal = 45.5 + 0.535 * ($altura - 152.4);
+                            }
+                            //$pesoIdeal = 45.5;
+
+                            /************************* CALCULO IMC ************************/
+                                $altura = $_POST["actualizarAltura"];
+                                $peso = $_POST["actualizarPeso"];
+                                $alturaMetros = $altura / 100;
+                                $calculoIMC = $peso / ($alturaMetros ** 2);
+                                $IMC = number_format($calculoIMC, 2);
+
+                            /************************* NIVEL DE PESO ************************/
+                            if($IMC <= 18.5){
+                                $nivelPeso = "BAJO PESO";
+                            }if($IMC >= 18.5 AND $IMC <= 24.9){
+                                $nivelPeso = "PESO NORMAL";
+                            }if($IMC >= 25 AND $IMC <= 29.9){
+                                $nivelPeso = "SOBREPESO";
+                            }if($IMC >= 30){
+                                $nivelPeso = "OBECIDAD";
+                            }
+                            /**************************************************************/
+
                         $datos = array("id" => $_POST["idUsuario"],
                                     "token" => $actualizarToken,
                                     "nombre" => $_POST["actualizarNombre"],
                                     "apellido" => $_POST["actualizarApp"],
                                     "curp" => $_POST["actualizarCurp"],
                                     "edad" => $edad,
+                                    "peso" => $_POST["actualizarPeso"],
+                                    "peso_ideal" => $pesoIdeal,
+                                    "nivel_peso" => $nivelPeso,
+                                    "imc" => $IMC,
                                     "peso" => $_POST["actualizarPeso"],
                                     "altura" => $_POST["actualizarAltura"],
                                     "sexo" => $_POST["actualizarSexo"],

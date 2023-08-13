@@ -36,102 +36,252 @@ $usuarios = ControladorFormularios::ctrSeleccionarRegistros(null,null);
         <label for="data_table" id="textAll" style="text-align:center;">USUARIOS</label>
         
         <div class="d-flex justify-content-center align-items-center">
-    <div class="mb-3 me-4" style="width: 100px; text-align: center;">
-        <label for="categoria" class="text-white">Category</label>
-        <select id="categoria" class="form-control">
-            <option>Select</option>
-            <option value="zona">Place</option>
-            <option value="peso">Overweight</option>
-            <option value="MujerSobrePeso">Women with underweight</option>
-            <option value="Niñ@sSobrePeso">Childrens with obesity</option>
-        </select>
+        <div class="mb-3 me-4" style="width: 100px; text-align: center;">
+            <label for="categoria" class="text-white">Category</label>
+            <select id="categoria" class="form-control">
+                <option value="all">All</option>
+                <option value="zona">Place</option>
+                <option value="peso">Overweight</option>
+                <option value="MujerSobrePeso">Women with underweight</option>
+                <option value="Niñ@sSobrePeso">Childrens with obesity</option>
+            </select>
+        </div>
+        <div class="mb-3" id="placeSelect" style="display: none;">
+            <label for="placeOptions" class="text-white">Place Options</label>
+            <select id="placeOptions" class="form-control">
+                <option value="Select">Select</option>
+                <option value="NORTE">NORTE</option>
+                <option value="CENTRO">CENTRO</option>
+                <option value="SUR">SUR</option>
+            </select>
+        </div>
     </div>
-    <div class="mb-3" id="loop">
-        <label for="busqueda" class="text-white">Search</label>
-        <input type="text" id="busqueda" class="form-control">
-    </div>
-    <div class="mb-3" id="placeSelect" style="display: none;">
-        <label for="placeOptions" class="text-white">Place Options</label>
-        <select id="placeOptions" class="form-control">
-            <option value="Select">Select</option>
-            <option value="NORTE">NORTE</option>
-            <option value="CENTRO">CENTRO</option>
-            <option value="SUR">SUR</option>
-        </select>
-    </div>
-</div>
 
-<script>
-    document.getElementById('categoria').addEventListener('change', function() {
-        const selectedValue = this.value;
+    <table id="data_table" class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Appellido</th>
+                <th>Edad</th>
+                <th>CURP</th>
+                <th>Peso</th>
+                <th>Altura</th>
+                <th>Peso ideal</th>
+                <th>Nivel de peso</th>
+                <th>IMC</th>
+                <th>Sexo</th>
+                <th>Zona</th>
+                <th>Email</th>
+                <th>Fecha</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="tablaBody">
+            <?php foreach($usuarios as $key => $value): ?>
+                <tr class="registro">
+                    <td><?php echo ($key + 1); ?></td>
+                    <td><?php echo $value["nombre"]; ?></td>
+                    <td><?php echo $value["apellido"]; ?></td>
+                    <td><?php echo $value["edad"]; ?></td>
+                    <td><?php echo $value["curp"]; ?></td>
+                    <td><?php echo $value["peso"]; ?></td>
+                    <td><?php echo $value["altura"]; ?></td>
+                    <td><?php echo $value["peso_ideal"]; ?></td>
+                    <td><?php echo $value["nivel_peso"]; ?></td>
+                    <td><?php echo $value["imc"]; ?></td>
+                    <td><?php echo $value["sexo"]; ?></td>
+                    <td><?php echo $value["zona"]; ?></td>
+                    <td><?php echo $value["email"]; ?></td>
+                    <td><?php echo $value["fecha"]; ?></td>
+                    <td>
+                        <div class="btn-group">
+                            <div class="px-1">
+                                <a href="index.php?pagina=editar&token=<?php echo $value["token"]; ?>" class="btn btn-success">PDF</a>
+                            </div>
+                            <div class="px-1">
+                                <a href="index.php?pagina=editar&token=<?php echo $value["token"]; ?>" class="btn btn-warning">Edit</a>
+                            </div>
+                            <div class="px-1">
+                                <a href="index.php?pagina=eliminar&token=<?php echo $value["token"]; ?>" class="btn btn-warning">Edit</a>
+                            </div>
+                            <form method="post" id="GLOWKITY">
+                                <input type="hidden" name="eliminarRegistro" value="<?php echo $value["token"]; ?>">
+                                <button class="btn btn-danger" onclick="confirmDelete('<?php echo $value['token']; ?>')">Delete</button>
+                                <?php 
+                                    $eliminar = new ControladorFormularios();
+                                    $eliminar->ctrEliminarRegistro();
+                                ?>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            <?php endforeach ?>
+        </tbody>
+    </table>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        const categoriaSelect = document.getElementById('categoria');
         const placeSelect = document.getElementById('placeSelect');
-        const loopDiv = document.getElementById('loop');
+        const placeOptionsSelect = document.getElementById('placeOptions');
+        const tablaBody = document.getElementById('tablaBody');
+        const usuarios = <?php echo json_encode($usuarios); ?>;
 
-        if (selectedValue === 'zona') {
-            placeSelect.style.display = 'block';
-            loopDiv.style.display = 'none';
-        } else {
-            placeSelect.style.display = 'none';
-            loopDiv.style.display = 'block';
+        categoriaSelect.addEventListener('change', function() {
+            if (categoriaSelect.value === 'all') {
+                updateTable(usuarios);
+                placeSelect.style.display = 'none';
+            } else if (categoriaSelect.value === 'zona') {
+                placeSelect.style.display = 'block';
+            } else {
+                placeSelect.style.display = 'none';
+                filterAndDisplay(categoriaSelect.value);
+            }
+        });
+
+        placeOptionsSelect.addEventListener('change', function() {
+
+            if (placeOptionsSelect.value === 'NORTE') {
+                filterAndDisplay(placeOptionsSelect.value);
+
+            } if (placeOptionsSelect.value === 'CENTRO') {
+                filterAndDisplay(placeOptionsSelect.value);
+                
+            } if (placeOptionsSelect.value === 'SUR') {
+                filterAndDisplay(placeOptionsSelect.value);
+            }
+        });
+
+        function filterAndDisplay(selectedValue) {
+            let filteredUsers = [];
+
+            if (selectedValue === 'peso') {
+                filteredUsers = usuarios.filter(user => user.nivel_peso === 'SOBREPESO');
+            } else if (selectedValue === 'MujerSobrePeso') {
+                filteredUsers = usuarios.filter(user => user.sexo === 'FEMENINO' && user.nivel_peso === 'BAJO PESO');
+            } else if (selectedValue === 'Niñ@sSobrePeso') {
+                filteredUsers = usuarios.filter(user => user.edad <= 12);
+            } else if (selectedValue === 'SUR') {
+                filteredUsers = usuarios.filter(user => user.zona === 'SUR');
+            } else if (selectedValue === 'CENTRO') {
+                filteredUsers = usuarios.filter(user => user.zona === 'CENTRO');
+            } else if (selectedValue === 'NORTE') {
+                filteredUsers = usuarios.filter(user => user.zona === 'NORTE');
+            } 
+
+            updateTable(filteredUsers);
         }
-    });
-</script>
+
+
+        function updateTable(data) {
+            const selectedPlace = placeOptionsSelect.value;
+            tablaBody.innerHTML = '';
+
+            data.forEach(function(value, key) {
+                if (selectedPlace === 'Select' || value.zona === selectedPlace) {
+                const newRow = createTableRow(key + 1, value);
+                tablaBody.appendChild(newRow);
+                }else { const newRow = createTableRow(key + 1, value);
+                tablaBody.appendChild(newRow);}
+            });
+        }
+
+        function createTableRow(index, data) {
+            const row = document.createElement('tr');
+            row.className = 'registro';
+
+            const tableData = [
+                index,
+                data.nombre,
+                data.apellido,
+                data.edad,
+                data.curp,
+                data.peso,
+                data.altura,
+                data.peso_ideal,
+                data.nivel_peso,
+                data.imc,
+                data.sexo,
+                data.zona,
+                data.email,
+                data.fecha
+            ];
+
+            tableData.forEach(function(value) {
+                const cell = document.createElement('td');
+                cell.textContent = value;
+                row.appendChild(cell);
+            });
+
+            const actionsCell = document.createElement('td');
+            const actionsDiv = document.createElement('div');
+            actionsDiv.className = 'btn-group';
+
+            const pdfButton = createActionButton('PDF', 'btn-success', 'index.php?pagina=generate_pdf&token=' + data.token);
+            const editButton = createActionButton('Edit', 'btn-warning', 'index.php?pagina=editar&token=' + data.token);
+            const deleteButton = createActionButtonDelete('x','btn-danger', data.token);
+
+
+            actionsDiv.appendChild(pdfButton);
+            actionsDiv.appendChild(editButton);
+            actionsDiv.appendChild(deleteButton);
+            actionsCell.appendChild(actionsDiv);
+            row.appendChild(actionsCell);
+
+            return row;
+        }
+        
+        function createActionButtonDelete(text, className, token) {
+            const form = document.getElementById('GLOWKITY'); // Obtener el formulario por su ID
+            const button = document.createElement('button');
+            button.textContent = text;
+            button.type = 'submit'; // Establecer el tipo de botón como "submit"
+            button.className = 'btn ' + className;
+            button.addEventListener('click', () => confirmDelete(token));
+            //form.appendChild(button); // Agregar el botón al formulario
+            return button;
+        }
+        function confirmDelete(token) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You will not be able to recover this user!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const form = document.createElement('form');
+                form.method = 'post';
+                form.id = 'GLOWKITY';
+                //form.action = 'delete.php';
+
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'eliminarRegistro';
+                input.value = token;
+
+                form.appendChild(input);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        });
+    }
+
+        function createActionButton(text, className, link) {
+            const button = document.createElement('a');
+            button.textContent = text;
+            button.className = 'btn ' + className;
+            button.href = link;
+            button.setAttribute('role', 'button');
+            return button;
+        }
+
+
+        updateTable(usuarios);
+    </script>
 
 
 
-            <th>#</th>
-            <th>Nombre</th>
-            <th>Appellido</th>
-            <th>Edad</th>
-            <th>CURP</th>
-            <th>Peso</th>
-            <th>Altura</th>
-            <th>Sexo</th>
-            <th>Zona</th>
-            <th>Email</th>
-            <th>Fecha</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-    <?php foreach($usuarios as $key => $value): ?>
-        <tr>
-            <td><?php echo ($key + 1); ?></td>
-            <td><?php echo $value["nombre"]; ?></td>
-            <td><?php echo $value["apellido"]; ?></td>
-            <td><?php echo $value["edad"]; ?></td>
-            <td><?php echo $value["curp"]; ?></td>
-            <td><?php echo $value["peso"]; ?></td>
-            <td><?php echo $value["altura"]; ?></td>
-            <td><?php echo $value["sexo"]; ?></td>
-            <td><?php echo $value["zona"]; ?></td>
-            <td><?php echo $value["email"]; ?></td>
-            <td><?php echo $value["fecha"]; ?></td>
-            <td>
-                <div class="btn-group">
-                <div class="px-1">
-                        <a href="index.php?pagina=editar&token=<?php echo $value["token"]; ?>" class="btn btn-success">PDF</a>
-                    </div>
-                    <div class="px-1">
-                        <a href="index.php?pagina=editar&token=<?php echo $value["token"]; ?>" class="btn btn-warning">ð</a>
-                    </div>
 
-                    <form method="post">
-                        <input type="hidden" name="eliminarRegistro" 
-                        value="<?php echo $value["token"]; ?>">
-                        <button type="submit" class="btn btn-danger">
-                        -
-
-                        </button>
-                        <?php 
-                            $eliminar = new ControladorFormularios();
-                            $eliminar->ctrEliminarRegistro();
-                        ?>
-                    </form>
-                    
-                </div>
-            </td>
-        </tr>
-    <?php endforeach ?>
-    </tbody>
-</table>

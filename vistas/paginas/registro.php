@@ -104,7 +104,7 @@
 
                 <div class="form-group">
                     <label for="nombre">Height</label>
-                    <input type="number" class="form-control" placeholder="Mts" id="nombre" name="registroAltura">
+                    <input type="float" class="form-control" placeholder="Mts" id="nombre" name="registroAltura">
                 </div>
 
                 <div class="form-group">

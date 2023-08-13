@@ -299,6 +299,7 @@ if ( ($_GET["pagina"] == "ingreso")){
             $_GET["pagina"] == "inicioEvents" ||
             $_GET["pagina"] == "editar" ||
             $_GET["pagina"] == "editarUsers" ||
+            $_GET["pagina"] == "generate_pdf" ||
             $_GET["pagina"] == "salir"
               ){
                 include "paginas/" . $_GET["pagina"] . ".php";
@@ -312,6 +313,7 @@ if ( ($_GET["pagina"] == "ingreso")){
                   isset($_GET["pagina"]) && $_GET["pagina"] === "inicioEvents"||  
                   isset($_GET["pagina"]) && $_GET["pagina"] === "editar"||  
                   isset($_GET["pagina"]) && $_GET["pagina"] === "editarUsers"||  
+                  isset($_GET["pagina"]) && $_GET["pagina"] === "generate_pdf"|| 
                   isset($_GET["pagina"]) && $_GET["pagina"] === "salir") {
                 // Si $_GET["pagina"] es igual a "registro", establecemos una variable JavaScript para ocultar el botón
                 echo '<script>document.addEventListener("DOMContentLoaded", function() { 
