@@ -26,7 +26,7 @@
         }
        
 </style>
-<br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br>
         <div style="width:auto;">
     <?php
             $ingreso = new ControladorFormularios();

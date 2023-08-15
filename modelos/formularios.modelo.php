@@ -11,8 +11,8 @@ class ModeloFormularios{
         #statement --- declaración del sql
         #prepare() --- Pararar la sensencia
 
-        $stmt = Conexion::conectar()->prepare("INSERT INTO $tabla (token,nombre,apellido,curp,edad,peso,altura,sexo,zona,email, password) 
-            VALUES (:token,:nombre,:apellido,:curp,:edad,:peso,:altura,:sexo,:zona, :email, :password) ");
+        $stmt = Conexion::conectar()->prepare("INSERT INTO $tabla (token,nombre,apellido,curp,edad,peso,peso_ideal,nivel_peso,imc,altura,sexo,zona,email, password) 
+            VALUES (:token,:nombre,:apellido,:curp,:edad,:peso,:peso_ideal,:nivel_peso,:imc,:altura,:sexo,:zona, :email, :password) ");
         
         #bindParam() vincular los parámetros
 
@@ -22,6 +22,9 @@ class ModeloFormularios{
         $stmt->bindParam(":curp",$datos["curp"],PDO::PARAM_STR);
         $stmt->bindParam(":edad",$datos["edad"],PDO::PARAM_STR);
         $stmt->bindParam(":peso",$datos["peso"],PDO::PARAM_STR);
+        $stmt->bindParam(":peso_ideal",$datos["peso_ideal"],PDO::PARAM_STR);
+        $stmt->bindParam(":nivel_peso",$datos["nivel_peso"],PDO::PARAM_STR);
+        $stmt->bindParam(":imc",$datos["imc"],PDO::PARAM_STR);
         $stmt->bindParam(":altura",$datos["altura"],PDO::PARAM_STR);
         $stmt->bindParam(":sexo",$datos["sexo"],PDO::PARAM_STR);
         $stmt->bindParam(":zona",$datos["zona"],PDO::PARAM_STR);
@@ -62,8 +65,8 @@ class ModeloFormularios{
      * Actualizar Registros
      ************************/
     static public function mdlActualizarRegistro($tabla, $datos){  
-        $stmt = Conexion::conectar()->prepare("UPDATE $tabla SET token=:token, nombre=:nombre, apellido=:apellido,curp=:curp, edad=:edad,peso=:peso,
-        altura=:altura,sexo=:sexo,zona=:zona, email=:email, password=:password WHERE id=:id");
+        $stmt = Conexion::conectar()->prepare("UPDATE $tabla SET token=:token, nombre=:nombre, apellido=:apellido,curp=:curp, edad=:edad,peso=:peso,peso_ideal=:peso_ideal,
+        nivel_peso=:nivel_peso,imc=:imc,altura=:altura,sexo=:sexo,zona=:zona, email=:email, password=:password WHERE id=:id");
         //pasar los parámetros
         $stmt->bindParam(":token", $datos["token"], PDO::PARAM_STR);
         $stmt->bindParam(":nombre", $datos["nombre"], PDO::PARAM_STR);
@@ -71,6 +74,9 @@ class ModeloFormularios{
         $stmt->bindParam(":curp", $datos["curp"], PDO::PARAM_STR);
         $stmt->bindParam(":edad", $datos["edad"], PDO::PARAM_STR);
         $stmt->bindParam(":peso", $datos["peso"], PDO::PARAM_STR);
+        $stmt->bindParam(":peso_ideal", $datos["peso_ideal"], PDO::PARAM_STR);
+        $stmt->bindParam(":nivel_peso", $datos["nivel_peso"], PDO::PARAM_STR);
+        $stmt->bindParam(":imc", $datos["imc"], PDO::PARAM_STR);
         $stmt->bindParam(":altura", $datos["altura"], PDO::PARAM_STR);
         $stmt->bindParam(":sexo", $datos["sexo"], PDO::PARAM_STR);
         $stmt->bindParam(":zona", $datos["zona"], PDO::PARAM_STR);

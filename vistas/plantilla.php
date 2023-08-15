@@ -148,8 +148,6 @@ a{
     opacity: 0.8; /* Ajusta la opacidad según tu preferencia */
     z-index: -1; /* Colocamos el fondo detrás del contenido */
 }
-
-
 </style>
 
 
@@ -171,7 +169,6 @@ if (isset($_SESSION["validaringreso"]) && $_SESSION["validaringreso"]) {
     $activePage = $_GET["pagina"];
     $usersListClass = ($activePage == "inicio") ? 'active' : '';
     $newUserClass = ($activePage == "registro" && !isset($_GET["user"])) ? 'active' : '';
-    $newEventClass = ($activePage == "registroEvents" && !isset($_GET["event"])) ? 'active' : '';
 
     // Mostrar los botones con la clase apropiada dependiendo de cada interfaz
                               /************************/
@@ -191,9 +188,15 @@ if ($activePage == "inicio") {
             </div>
         </div>';
 }
-
-    if ($activePage == "registro") {
-        echo '<div class="dropdown">
+ if ($activePage == "registro") {
+        echo '<div class="sep" id="header-fixed" hidden>
+        <br>
+        <a href="index.php" style="text-decoration: none;">
+        <h3 id="textAll" style="font-size:26px;">I M C</h3>
+        <h3 id="textAll">REPOsRTES</h3>
+        </a>
+    </div>
+    <div class="dropdown">
                   <a id="boton_navbar_active" class="' . $newUserClass . ' btn btn-lg btn text-white dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ADD USER</a>
                   <div class="dropdown-menu" aria-labelledby="boton_navbar" style="border-radius:20px;">
                     <a style="font-size: 22px;" class="dropdown-item " id="user" href="index.php?pagina=registro">NEW USER</a>
@@ -211,40 +214,80 @@ if ($activePage == "inicio") {
     echo '<div class="dropdown">
                   <a id="boton_navbar" class="' . $inactiveClass . ' btn btn-lg btn text-white dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">OPTIONS</a>
                   <div class="dropdown-menu" aria-labelledby="boton_navbar" style="border-radius:20px;">
-                    <a style="font-size: 22px;" class="dropdown-item" href="index.php?pagina=contacto">CONTACTO</a>
-                    <a style="font-size: 22px;" class="dropdown-item" href="index.php?pagina=aboutus">ABOUT US</a>
+                    <a style="font-size: 22px;" class="dropdown-item" href="#">CONTACTO</a>
+                    <a style="font-size: 22px;" class="dropdown-item" href="#">ABOUT US</a>
                     <a style="font-size: 22px;" class="dropdown-item" href="index.php?pagina=salir">EXIT</a>
                   </div>
               </div>';
 
     echo '</div></div></div></div></nav></div>';
-} else {
-    echo '<div class="sep" id="header-fixed">
-              <br>
-            <a href="index.php"></a>
-            <h3 id="textAll" style="font-size:26px;">I M C</h3>
-            <h3 id="textAll">REPORTES</h3>
-        </div>
-        
-        <main class="container-fluid" style="background: transparent;">
+    if ($activePage == "ingreso") {
+      echo '<div class="sep" id="header-fixed">
+                <br>
+              
+              <a href="index.php"><h3 id="textAll" style="font-size:26px;">I M C</h3>
+              <h3 id="textAll">REPORTES</h3></a>
+          </div>
+          
+          <main class="container-fluid" style="background: transparent;">
+          <div class="container py-5"><br><br><br>      
+          <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center shadow-lg">
+              <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
+                  <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
+                      <a id="boton_encima1" class="btn btn-lg btn-primary" href="index.php?pagina=registro">SIGNUP</a>
+                      <a id="boton_encima2" class="btn btn-lg btn-primary" href="index.php?pagina=ingreso">LOGIN</a>
+                  </div>
+              </div>
+              <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
+                  <img class="rounded-lg-3" src="./vistas/css/img/home.jpg"  width="700" >
+              </div>
+          </div>
+      </div>';
+  } 
+  
+} else {echo'<div class="sep" id="header-fixed">
+  <br>
+  <a href="index.php" style="text-decoration: none;">
+  <h3 id="textAll" style="font-size:26px;">I M C</h3>
+  <h3 id="textAll">REPORTES</h3>
+  </a>
+</div>';} ?>
+<?php 
+if (isset($_GET["pagina"])){
+
+if ( ($_GET["pagina"] == "ingreso")){
+   echo '<div class="sep" id="header-fixed" >
+        <br>
+        <a href="index.php" style="text-decoration: none;">
+        <h3 id="textAll" style="font-size:26px;">I M C</h3>
+        <h3 id="textAll">REPORTES</h3>
+        </a>
+    </div>';
+} 
+} else { 
+  echo'
+
+    <main class="container-fluid" style="background: transparent;">
         <div class="container py-5"><br><br><br>      
-        <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center shadow-lg">
-            <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
-                <h1 class="display-4 fw-bold lh-1">Border hero with cropped image and shadows</h1>
-                <p class="lead">Quickly design and customize responsive mobile-first sites with Bootstrap, the world’s most popular front-end open source toolkit, featuring Sass variables and mixins, responsive grid system, extensive prebuilt components, and powerful JavaScript plugins.</p>
-                <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
-                    <a id="boton_encima1" class="btn btn-lg btn-primary" href="index.php?pagina=registro">SIGNUP</a>
-                    <a id="boton_encima2" class="btn btn-lg btn-primary" href="index.php?pagina=ingreso">LOGIN</a>
+            <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center shadow-lg">
+                <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
+                    <h1 class="display-4 fw-bold lh-1">Border hero with cropped image and shadows</h1>
+                    <p class="lead">Quickly design and customize responsive mobile-first sites with Bootstrap, the world’s most popular front-end open source toolkit, featuring Sass variables and mixins, responsive grid system, extensive prebuilt components, and powerful JavaScript plugins.</p>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
+                        <a id="boton_encima1" class="btn btn-lg btn-primary" href="index.php?pagina=registro">SIGNUP</a>
+                        <a id="boton_encima2" class="btn btn-lg btn-primary" href="index.php?pagina=ingreso">LOGIN</a>
+                    </div>
+                </div>
+                <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
+                    <img class="rounded-lg-3" src="./vistas/css/img/home.jpg"  width="700" >
                 </div>
             </div>
-            <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
-                <img class="rounded-lg-3" src="./vistas/css/img/home.jpg"  width="700" >
-            </div>
         </div>
-    </div>';
-}
+    </main>';
+}?>
 
-?>   
+
+   
           <?php 
           #isset: isset() Determinar si una variable esta definida y no es NULL
           if(isset($_GET["pagina"])){
@@ -256,6 +299,8 @@ if ($activePage == "inicio") {
             $_GET["pagina"] == "inicioEvents" ||
             $_GET["pagina"] == "editar" ||
             $_GET["pagina"] == "editarUsers" ||
+            $_GET["pagina"] == "generate_pdf" ||
+            $_GET["pagina"] == "generatePromedios_pdf" ||
             $_GET["pagina"] == "salir"
               ){
                 include "paginas/" . $_GET["pagina"] . ".php";
@@ -269,6 +314,8 @@ if ($activePage == "inicio") {
                   isset($_GET["pagina"]) && $_GET["pagina"] === "inicioEvents"||  
                   isset($_GET["pagina"]) && $_GET["pagina"] === "editar"||  
                   isset($_GET["pagina"]) && $_GET["pagina"] === "editarUsers"||  
+                  isset($_GET["pagina"]) && $_GET["pagina"] === "generate_pdf"|| 
+                  isset($_GET["pagina"]) && $_GET["pagina"] === "generatePromedios_pdf"||
                   isset($_GET["pagina"]) && $_GET["pagina"] === "salir") {
                 // Si $_GET["pagina"] es igual a "registro", establecemos una variable JavaScript para ocultar el botón
                 echo '<script>document.addEventListener("DOMContentLoaded", function() { 
