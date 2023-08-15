@@ -214,8 +214,8 @@ if ($activePage == "inicio") {
     echo '<div class="dropdown">
                   <a id="boton_navbar" class="' . $inactiveClass . ' btn btn-lg btn text-white dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">OPTIONS</a>
                   <div class="dropdown-menu" aria-labelledby="boton_navbar" style="border-radius:20px;">
-                    <a style="font-size: 22px;" class="dropdown-item" href="index.php?pagina=contacto">CONTACTO</a>
-                    <a style="font-size: 22px;" class="dropdown-item" href="index.php?pagina=aboutus">ABOUT US</a>
+                    <a style="font-size: 22px;" class="dropdown-item" href="#">CONTACTO</a>
+                    <a style="font-size: 22px;" class="dropdown-item" href="#">ABOUT US</a>
                     <a style="font-size: 22px;" class="dropdown-item" href="index.php?pagina=salir">EXIT</a>
                   </div>
               </div>';
@@ -300,6 +300,7 @@ if ( ($_GET["pagina"] == "ingreso")){
             $_GET["pagina"] == "editar" ||
             $_GET["pagina"] == "editarUsers" ||
             $_GET["pagina"] == "generate_pdf" ||
+            $_GET["pagina"] == "generatePromedios_pdf" ||
             $_GET["pagina"] == "salir"
               ){
                 include "paginas/" . $_GET["pagina"] . ".php";
@@ -314,6 +315,7 @@ if ( ($_GET["pagina"] == "ingreso")){
                   isset($_GET["pagina"]) && $_GET["pagina"] === "editar"||  
                   isset($_GET["pagina"]) && $_GET["pagina"] === "editarUsers"||  
                   isset($_GET["pagina"]) && $_GET["pagina"] === "generate_pdf"|| 
+                  isset($_GET["pagina"]) && $_GET["pagina"] === "generatePromedios_pdf"||
                   isset($_GET["pagina"]) && $_GET["pagina"] === "salir") {
                 // Si $_GET["pagina"] es igual a "registro", establecemos una variable JavaScript para ocultar el botón
                 echo '<script>document.addEventListener("DOMContentLoaded", function() { 

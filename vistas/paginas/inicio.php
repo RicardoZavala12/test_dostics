@@ -36,26 +36,30 @@ $usuarios = ControladorFormularios::ctrSeleccionarRegistros(null,null);
         <label for="data_table" id="textAll" style="text-align:center;">USUARIOS</label>
         
         <div class="d-flex justify-content-center align-items-center">
-        <div class="mb-3 me-4" style="width: 100px; text-align: center;">
-            <label for="categoria" class="text-white">Category</label>
-            <select id="categoria" class="form-control">
-                <option value="all">All</option>
-                <option value="zona">Place</option>
-                <option value="peso">Overweight</option>
-                <option value="MujerSobrePeso">Women with underweight</option>
-                <option value="Niñ@sSobrePeso">Childrens with obesity</option>
-            </select>
-        </div>
-        <div class="mb-3" id="placeSelect" style="display: none;">
-            <label for="placeOptions" class="text-white">Place Options</label>
-            <select id="placeOptions" class="form-control">
-                <option value="Select">Select</option>
-                <option value="NORTE">NORTE</option>
-                <option value="CENTRO">CENTRO</option>
-                <option value="SUR">SUR</option>
-            </select>
-        </div>
+    <div class="mb-3 me-4" style="width: 100px; text-align: center;">
+        <label for="categoria" class="text-white">Category</label>
+        <select id="categoria" class="form-control">
+            <option value="all">All</option>
+            <option value="zona">Place</option>
+            <option value="peso">Overweight</option>
+            <option value="MujerBajoPeso">Women with underweight</option>
+            <option value="KidsSobrePeso">Childrens with obesity</option>
+        </select>
     </div>
+    <div class="mb-3 me-4" id="placeSelect" style="display: none;">
+        <label for="placeOptions" class="text-white">Place Options</label>
+        <select id="placeOptions" class="form-control">
+            <option value="Select">Select</option>
+            <option value="NORTE">NORTE</option>
+            <option value="CENTRO">CENTRO</option>
+            <option value="SUR">SUR</option>
+        </select>
+    </div>
+
+    <div class="mb-1">
+    <a href="vistas/paginas/pdf/generatePromedios_pdf.php" target="_blank" class="btn"><button class="btn btn-success">Generate averages</button></a>
+    </div>
+</div>
 
     <table id="data_table" class="table table-striped">
         <thead>
@@ -78,7 +82,7 @@ $usuarios = ControladorFormularios::ctrSeleccionarRegistros(null,null);
             </tr>
         </thead>
         <tbody id="tablaBody">
-            <?php foreach($usuarios as $key => $value): ?>
+        <?php foreach($usuarios as $key => $value): ?>
                 <tr class="registro">
                     <td><?php echo ($key + 1); ?></td>
                     <td><?php echo $value["nombre"]; ?></td>
@@ -97,7 +101,7 @@ $usuarios = ControladorFormularios::ctrSeleccionarRegistros(null,null);
                     <td>
                         <div class="btn-group">
                             <div class="px-1">
-                                <a href="index.php?pagina=editar&token=<?php echo $value["token"]; ?>" class="btn btn-success">PDF</a>
+                                <a href="index.php?pagina=editar&token=<?php echo $value["token"]; ?>" class="btn btn-success">n</a>
                             </div>
                             <div class="px-1">
                                 <a href="index.php?pagina=editar&token=<?php echo $value["token"]; ?>" class="btn btn-warning">Edit</a>
@@ -120,13 +124,14 @@ $usuarios = ControladorFormularios::ctrSeleccionarRegistros(null,null);
         </tbody>
     </table>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         const categoriaSelect = document.getElementById('categoria');
         const placeSelect = document.getElementById('placeSelect');
         const placeOptionsSelect = document.getElementById('placeOptions');
         const tablaBody = document.getElementById('tablaBody');
         const usuarios = <?php echo json_encode($usuarios); ?>;
+        
 
         categoriaSelect.addEventListener('change', function() {
             if (categoriaSelect.value === 'all') {
@@ -153,14 +158,16 @@ $usuarios = ControladorFormularios::ctrSeleccionarRegistros(null,null);
             }
         });
 
+        //let selectedValue = '';
         function filterAndDisplay(selectedValue) {
+            
             let filteredUsers = [];
 
             if (selectedValue === 'peso') {
                 filteredUsers = usuarios.filter(user => user.nivel_peso === 'SOBREPESO');
-            } else if (selectedValue === 'MujerSobrePeso') {
+            } else if (selectedValue === 'MujerBajoPeso') {
                 filteredUsers = usuarios.filter(user => user.sexo === 'FEMENINO' && user.nivel_peso === 'BAJO PESO');
-            } else if (selectedValue === 'Niñ@sSobrePeso') {
+            } else if (selectedValue === 'KidsSobrePeso') {
                 filteredUsers = usuarios.filter(user => user.edad <= 12);
             } else if (selectedValue === 'SUR') {
                 filteredUsers = usuarios.filter(user => user.zona === 'SUR');
@@ -170,11 +177,13 @@ $usuarios = ControladorFormularios::ctrSeleccionarRegistros(null,null);
                 filteredUsers = usuarios.filter(user => user.zona === 'NORTE');
             } 
 
-            updateTable(filteredUsers);
+            updateTable(filteredUsers, selectedValue);
+            //selectedValue = selectedValue;
+            createActionButtonPDF(selectedValue);
         }
 
 
-        function updateTable(data) {
+        function updateTable(data,selectedValue) {
             const selectedPlace = placeOptionsSelect.value;
             tablaBody.innerHTML = '';
 
@@ -187,7 +196,7 @@ $usuarios = ControladorFormularios::ctrSeleccionarRegistros(null,null);
             });
         }
 
-        function createTableRow(index, data) {
+        function createTableRow(index, data, selectedValue) {
             const row = document.createElement('tr');
             row.className = 'registro';
 
@@ -218,7 +227,7 @@ $usuarios = ControladorFormularios::ctrSeleccionarRegistros(null,null);
             const actionsDiv = document.createElement('div');
             actionsDiv.className = 'btn-group';
 
-            const pdfButton = createActionButton('PDF', 'btn-success', 'index.php?pagina=generate_pdf&token=' + data.token);
+            const pdfButton = createActionButtonPDF('PDF', 'btn-success', data.token, selectedValue);
             const editButton = createActionButton('Edit', 'btn-warning', 'index.php?pagina=editar&token=' + data.token);
             const deleteButton = createActionButtonDelete('x','btn-danger', data.token);
 
@@ -231,7 +240,45 @@ $usuarios = ControladorFormularios::ctrSeleccionarRegistros(null,null);
 
             return row;
         }
-        
+
+
+         /*************************************************************/
+            function createActionButtonPDF(text, className, token, selectedValue) {
+                const button = document.createElement('button');
+                button.textContent = text;
+                button.className = 'btn ' + className;
+                button.addEventListener('click', function() {
+                    //selectedValue = 'CENTRO';
+                    let pdfFile;
+                    if (categoriaSelect.value === 'all') {
+                        pdfFile = "generate_pdf.php";
+                    } else if (categoriaSelect.value === 'peso') {
+                        pdfFile = "generatePeso_pdf.php";
+                    } else if (categoriaSelect.value === 'MujerBajoPeso') {
+                        pdfFile = "generateMujerBajoPeso_pdf.php";
+                    }else if (categoriaSelect.value === 'KidsSobrePeso') {
+                        pdfFile = "generateNinoSobrePeso_pdf.php";
+                    } else if (placeOptionsSelect.value === 'NORTE') {
+                        pdfFile = "generateNORTE_pdf.php";
+                    }else if (placeOptionsSelect.value === 'SUR') {
+                        pdfFile = "generateSUR_pdf.php";
+                    }else if (placeOptionsSelect.value === 'CENTRO') {
+                        pdfFile = "generateCENTRO_pdf.php";
+                    } else {
+                        pdfFile = "generate_pdf.php";
+                    }
+                    window.open("vistas/paginas/pdf/" + pdfFile +  "?token=" + token, '_blank');
+                });
+                return button;
+            }
+
+                $(document).on("click", ".btn-successs", function() {
+                    const token = $(this).data("token");
+                    window.open("index.php?pagina=generatePromedios_pdf.php?token=" + token, '_blank');
+                });
+            /*************************************************************/
+
+
         function createActionButtonDelete(text, className, token) {
             const form = document.getElementById('GLOWKITY'); // Obtener el formulario por su ID
             const button = document.createElement('button');
@@ -242,6 +289,7 @@ $usuarios = ControladorFormularios::ctrSeleccionarRegistros(null,null);
             //form.appendChild(button); // Agregar el botón al formulario
             return button;
         }
+        
         function confirmDelete(token) {
         Swal.fire({
             title: 'Are you sure?',
