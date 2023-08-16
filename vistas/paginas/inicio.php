@@ -168,7 +168,7 @@ $usuarios = ControladorFormularios::ctrSeleccionarRegistros(null,null);
             } else if (selectedValue === 'MujerBajoPeso') {
                 filteredUsers = usuarios.filter(user => user.sexo === 'FEMENINO' && user.nivel_peso === 'BAJO PESO');
             } else if (selectedValue === 'KidsSobrePeso') {
-                filteredUsers = usuarios.filter(user => user.edad <= 12);
+                filteredUsers = usuarios.filter(user => user.edad <= 12 && user.nivel_peso === 'OBECIDAD');
             } else if (selectedValue === 'SUR') {
                 filteredUsers = usuarios.filter(user => user.zona === 'SUR');
             } else if (selectedValue === 'CENTRO') {
